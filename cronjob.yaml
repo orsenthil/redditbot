@@ -1,0 +1,62 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: redditbot
+spec:
+  schedule: "0 7 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: redditbot
+            image: skumaran/redditbot:arm-v0.1
+            env:
+              - name: REDDIT_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: REDDIT_USERNAME
+
+              - name: REDDIT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: REDDIT_PASSWORD
+
+              - name: REDDIT_API_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: REDDIT_API_CLIENT_SECRET
+
+              - name: REDDIT_API_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: REDDIT_API_CLIENT_ID
+
+              - name: SENDER_EMAIL
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: SENDER_EMAIL
+
+              - name: SENDER_EMAIL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: SENDER_EMAIL_PASSWORD
+
+              - name: SENDER_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: SENDER_NAME
+
+              - name: RECEIVER_EMAIL
+                valueFrom:
+                  secretKeyRef:
+                    name: redditbot-secrets
+                    key: RECEIVER_EMAIL
+          restartPolicy: OnFailure
